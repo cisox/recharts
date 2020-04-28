@@ -183,6 +183,37 @@ export type AreaChartProps = CategoricalChartWrapper & EventAttributes;
 
 export class AreaChart extends React.Component<AreaChartProps> { }
 
+export interface DistributionProps extends EventAttributes, Partial<PresentationAttributes>, Animatable {
+    dataKey: DataKey; // As the source code states, dataKey will replace valueKey in 1.1.0 and it'll be required (it's already required in current implementation).
+    className?: string;
+    type?: LineType;
+    unit?: string | number;
+    name?: string | number;
+    xAxisId?: string | number;
+    yAxisId?: string | number;
+    xAxis?: object;
+    yAxis?: object;
+    stackId?: string | number;
+    legendType?: LegendType;
+    connectNulls?: boolean;
+    activeDot?: boolean | object | React.ReactElement<any> | ContentRenderer<any>;
+    dot?: boolean | object | React.ReactElement<any> | ContentRenderer<DotProps>;
+    label?: boolean | object | ContentRenderer<any> | React.ReactElement<any>;
+    hide?: boolean;
+    layout?: LayoutType;
+    baseLine?: number | any[];
+    isRange?: boolean;
+    points?: Point[];
+}
+
+export class Distribution extends React.Component<DistributionProps> { }
+
+// NOTE: the lib's implementation doesn't inherits the event props (it's kept in this definition due to the previous typing definition has it).
+export type DistributionChartProps = CategoricalChartWrapper & EventAttributes;
+
+export class DistributionChart extends React.Component<DistributionChartProps> { }
+
+
 export interface BarData {
     x: number;
     y: number;
