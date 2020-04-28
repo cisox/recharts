@@ -151,6 +151,7 @@ export const getMainColorOfGraphicItem = (item: ReactElement) => {
       result = stroke;
       break;
     case 'Area':
+    case 'Distribution':
     case 'Radar':
       result = stroke && stroke !== 'none' ? stroke : fill;
       break;
@@ -625,6 +626,7 @@ export const parseScale = (axis: any, chartType: string) => {
       chartType &&
       (chartType.indexOf('LineChart') >= 0 ||
         chartType.indexOf('AreaChart') >= 0 ||
+        chartType.indexOf('DistributionChart') >= 0 ||
         chartType.indexOf('ComposedChart') >= 0)
     ) {
       return { scale: d3Scales.scalePoint(), realScaleType: 'point' };

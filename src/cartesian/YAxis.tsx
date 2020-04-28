@@ -17,7 +17,7 @@ export interface Props extends BaseAxisProps {
   height?: number;
   mirror?: boolean;
   /** The orientation of axis */
-  orientation?: 'left' | 'right';
+  orientation?: 'left' | 'right' | 'top' | 'bottom';
   padding?: {
     top?: number;
     bottom?: number;

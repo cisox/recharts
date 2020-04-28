@@ -13,7 +13,7 @@ export interface Props extends BaseAxisProps {
   height?: number;
   mirror?: boolean;
   // The orientation of axis
-  orientation?: 'top' | 'bottom';
+  orientation?: 'top' | 'bottom' | 'left' | 'right';
   /**
    * Ticks can be any type when the axis is the type of category
    * Ticks must be numbers when the axis is the type of number

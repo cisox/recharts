@@ -35,6 +35,7 @@ export { default as CartesianAxis } from './cartesian/CartesianAxis';
 export { default as CartesianGrid } from './cartesian/CartesianGrid';
 export { default as Line } from './cartesian/Line';
 export { default as Area } from './cartesian/Area';
+export { default as Distribution } from './cartesian/Distribution';
 export { default as Bar } from './cartesian/Bar';
 export { default as Scatter } from './cartesian/Scatter';
 export { default as XAxis } from './cartesian/XAxis';
@@ -50,6 +51,7 @@ export { default as Sankey } from './chart/Sankey';
 export { default as RadarChart } from './chart/RadarChart';
 export { default as ScatterChart } from './chart/ScatterChart';
 export { default as AreaChart } from './chart/AreaChart';
+export { default as DistributionChart } from './chart/DistributionChart';
 export { default as RadialBarChart } from './chart/RadialBarChart';
 export { default as ComposedChart } from './chart/ComposedChart';
 
