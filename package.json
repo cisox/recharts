@@ -5,7 +5,6 @@
   "main": "lib/index",
   "module": "es6/index",
   "jsnext:main": "es6/index",
-  "types": "./index.d.ts",
   "sideEffects": [
     "./*/index.js",
     "./*/polyfill.js"
