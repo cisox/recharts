@@ -35,6 +35,7 @@ export CartesianAxis from './cartesian/CartesianAxis';
 export CartesianGrid from './cartesian/CartesianGrid';
 export Line from './cartesian/Line';
 export Area from './cartesian/Area';
+export Distribution from './cartesian/Distribution';
 export Bar from './cartesian/Bar';
 export Scatter from './cartesian/Scatter';
 export XAxis from './cartesian/XAxis';
@@ -50,6 +51,7 @@ export Sankey from './chart/Sankey';
 export RadarChart from './chart/RadarChart';
 export ScatterChart from './chart/ScatterChart';
 export AreaChart from './chart/AreaChart';
+export DistributionChart from './chart/DistributionChart';
 export RadialBarChart from './chart/RadialBarChart';
 export ComposedChart from './chart/ComposedChart';
 

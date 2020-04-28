@@ -129,6 +129,7 @@ export const getMainColorOfGraphicItem = (item) => {
       result = stroke;
       break;
     case 'Area':
+    case 'Distribution':
     case 'Radar':
       result = stroke && stroke !== 'none' ? stroke : fill;
       break;
@@ -557,7 +558,7 @@ export const parseScale = (axis, chartType) => {
     }
 
     if (type === 'category' && chartType && (chartType.indexOf('LineChart') >= 0 ||
-      chartType.indexOf('AreaChart') >= 0)) {
+      chartType.indexOf('AreaChart') >= 0 || chartType.indexOf('DistributionChart') >= 0)) {
       return { scale: d3Scales.scalePoint(), realScaleType: 'point' };
     } if (type === 'category') {
       return { scale: d3Scales.scaleBand(), realScaleType: 'band' };
