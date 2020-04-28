@@ -14,6 +14,7 @@ import { PRESENTATION_ATTRIBUTES, EVENT_ATTRIBUTES, LEGEND_TYPES, TOOLTIP_TYPES,
   getPresentationAttributes, isSsr, filterEventAttributes } from '../util/ReactUtils';
 import { isNumber, uniqueId, interpolateNumber } from '../util/DataUtils';
 import { getCateCoordinateOfLine, getValueByDataKey } from '../util/ChartUtils';
+import Rectangle from '../shape/Rectangle';
 
 
 class Distribution extends PureComponent {
@@ -65,6 +66,7 @@ class Distribution extends PureComponent {
       value: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
     })),
 
+    onCutoffChange: PropTypes.func.isRequired,
     onAnimationStart: PropTypes.func,
     onAnimationEnd: PropTypes.func,
 
@@ -73,6 +75,7 @@ class Distribution extends PureComponent {
     animationBegin: PropTypes.number,
     animationDuration: PropTypes.number,
     animationEasing: PropTypes.oneOf(['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear']),
+    cutoff: PropTypes.number.isRequired,
 
     id: PropTypes.string,
   };
@@ -97,6 +100,41 @@ class Distribution extends PureComponent {
     animationDuration: 1500,
     animationEasing: 'ease',
   };
+
+  startDrag = (event) => {
+    event.preventDefault();
+    let point = this.svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = 0;
+    point = point.matrixTransform(this.svg.getScreenCTM().inverse());
+    this.setState({
+      cutoffOffset: {
+        x: point.x - this.state.cutoffSlider.x
+      }
+    });
+
+    const mousemove = (evt) => {
+      evt.preventDefault();
+      point.x = evt.clientX;
+      point.y = 0;
+      const cursor = point.matrixTransform(this.svg.getScreenCTM().inverse());
+      this.setState({
+        cutoffSlider: {
+          x: cursor.x - this.state.cutoffOffset.x,
+        }
+      });
+    };
+
+    const mouseup = () => {
+      document.removeEventListener('mousemove', mousemove);
+      document.removeEventListener('mouseup', mouseup);
+
+      this.props.onCutoffChange(this.state.cutoffOffset.x / this.props.width);
+    };
+
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
+  }
 
   static getBaseValue = (props, xAxis, yAxis) => {
     const { layout, baseValue } = props;
@@ -123,7 +161,7 @@ class Distribution extends PureComponent {
   };
 
   static getComposedData = ({ props, xAxis, yAxis, xAxisTicks, yAxisTicks, bandSize,
-                              dataKey, stackedData, dataStartIndex, displayedData, offset }) => {
+    dataKey, stackedData, dataStartIndex, displayedData, offset }) => {
     const { layout } = props;
     const hasStack = stackedData && stackedData.length;
     const baseValue = Distribution.getBaseValue(props, xAxis, yAxis);
@@ -198,10 +236,18 @@ class Distribution extends PureComponent {
     return dotItem;
   };
 
-  state = { isAnimationFinished: true };
+  state = {
+    isAnimationFinished: true,
+    cutoffSlider: {
+      x: this.props.width * this.props.cutoff,
+    },
+    cutoffOffset: {
+      x: 0
+    }
+  };
 
   // eslint-disable-next-line camelcase
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { animationId, points, baseLine } = this.props;
 
     if (nextProps.animationId !== animationId) {
@@ -209,7 +255,7 @@ class Distribution extends PureComponent {
     }
   }
 
-  id = uniqueId('recharts-area-');
+  id = uniqueId('recharts-distribution-');
 
   cachePrevData = (points, baseLine) => {
     this.setState({
@@ -271,17 +317,33 @@ class Distribution extends PureComponent {
     return <Layer className="recharts-area-dots" {...dotsProps}>{dots}</Layer>;
   }
 
+  renderSlider() {
+    const {height} = this.props;
+    const {cutoffSlider} = this.state;
+
+    return (
+      <Rectangle
+        x={cutoffSlider.x}
+        y={0}
+        width={4}
+        height={height}
+        ref={(e) => this.svgRectElem = e}
+        onMouseDown={(e) => this.startDrag(e, this.svgRectElem)}
+      />
+    );
+  }
+
   renderHorizontalRect(alpha) {
     const { baseLine, points, strokeWidth } = this.props;
     const startX = points[0].x;
     const endX = points[points.length - 1].x;
     const width = alpha * Math.abs(startX - endX);
-    let maxY = _.max(points.map(entry => (entry.y || 0)));
+    let maxY = _.max(points.map((entry) => (entry.y || 0)));
 
     if (isNumber(baseLine)) {
       maxY = Math.max(baseLine, maxY);
     } else if (baseLine && _.isArray(baseLine) && baseLine.length) {
-      maxY = Math.max(_.max(baseLine.map(entry => (entry.y || 0))), maxY);
+      maxY = Math.max(_.max(baseLine.map((entry) => (entry.y || 0))), maxY);
     }
 
     if (isNumber(maxY)) {
@@ -303,12 +365,12 @@ class Distribution extends PureComponent {
     const startY = points[0].y;
     const endY = points[points.length - 1].y;
     const height = alpha * Math.abs(startY - endY);
-    let maxX = _.max(points.map(entry => (entry.x || 0)));
+    let maxX = _.max(points.map((entry) => (entry.x || 0)));
 
     if (isNumber(baseLine)) {
       maxX = Math.max(baseLine, maxX);
     } else if (baseLine && _.isArray(baseLine) && baseLine.length) {
-      maxX = Math.max(_.max(baseLine.map(entry => (entry.x || 0))), maxX);
+      maxX = Math.max(_.max(baseLine.map((entry) => (entry.x || 0))), maxX);
     }
 
     if (isNumber(maxX)) {
@@ -431,7 +493,12 @@ class Distribution extends PureComponent {
                 });
               }
 
-              return this.renderDistributionStatically(stepPoints, stepBaseLine, needClip, clipPathId);
+              return this.renderDistributionStatically(
+                stepPoints,
+                stepBaseLine,
+                needClip,
+                clipPathId
+              );
             }
 
             return (
@@ -486,6 +553,7 @@ class Distribution extends PureComponent {
             </clipPath>
           </defs>
         ) : null}
+        {this.renderSlider()}
         {!hasSinglePoint ? this.renderDistribution(needClip, clipPathId) : null}
         {(dot || hasSinglePoint) && this.renderDots(needClip, clipPathId)}
         {(!isAnimationActive || isAnimationFinished) &&

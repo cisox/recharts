@@ -357,6 +357,7 @@ class Area extends PureComponent {
         )}
         {stroke !== 'none' && isRange && (
           <Curve
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {...getPresentationAttributes(this.props)}
             className="recharts-area-curve"
             layout={layout}
