@@ -1,6 +1,7 @@
 /**
  * @fileOverview Y Axis
  */
+import { PropsWithChildren } from 'react';
 import { BaseAxisProps, AxisInterval } from '../util/types';
 
 export interface Props extends BaseAxisProps {
@@ -27,7 +28,7 @@ export interface Props extends BaseAxisProps {
   reversed?: boolean;
 }
 
-function YAxis(props: Props): any {
+function YAxis(props: PropsWithChildren<Props>): any {
   return null;
 }
 

@@ -1,6 +1,7 @@
 /**
  * @fileOverview X Axis
  */
+import { PropsWithChildren } from 'react';
 import { BaseAxisProps, AxisInterval } from '../util/types';
 
 /** Define of XAxis props */
@@ -24,7 +25,7 @@ export interface Props extends BaseAxisProps {
   interval?: AxisInterval;
   reversed?: boolean;
 }
-function XAxis(props: Props): any {
+function XAxis(props: PropsWithChildren<Props>): any {
   return null;
 }
 
