@@ -4,7 +4,7 @@
 import { PropsWithChildren } from 'react';
 import { BaseAxisProps, AxisInterval } from '../util/types';
 
-export interface Props extends BaseAxisProps {
+export interface Props extends PropsWithChildren<BaseAxisProps> {
   /** The unique id of y-axis */
   yAxisId?: string | number;
   /**
@@ -28,7 +28,7 @@ export interface Props extends BaseAxisProps {
   reversed?: boolean;
 }
 
-function YAxis(props: PropsWithChildren<Props>): any {
+function YAxis(props: Props): any {
   return null;
 }
 

@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import { BaseAxisProps, AxisInterval } from '../util/types';
 
 /** Define of XAxis props */
-export interface Props extends BaseAxisProps {
+export interface Props extends PropsWithChildren<BaseAxisProps> {
   /** The unique id of x-axis */
   xAxisId?: string | number;
   /** The width of axis which is usually calculated internally */
@@ -25,7 +25,7 @@ export interface Props extends BaseAxisProps {
   interval?: AxisInterval;
   reversed?: boolean;
 }
-function XAxis(props: PropsWithChildren<Props>): any {
+function XAxis(props: Props): any {
   return null;
 }
 
